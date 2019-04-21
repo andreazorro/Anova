@@ -3,6 +3,8 @@
 Implementation of the algorithm for inferring gene regulatory networks by ANOVA [1] and its variation applying
 a non-parametric Friedman Test [2] instead of a Two-way ANOVA. 
 
+Tested on MATLAB R2016a with the Parallel Computing Toolbox. 
+
 Required Input 
 --------------
 
