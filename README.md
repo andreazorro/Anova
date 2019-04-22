@@ -15,12 +15,14 @@ Required Input
 Output
 ------
 
-*Net_a = Inferred network write as 3-column cell array 
+* Net_a = Inferred network write as 3-column cell array 
+
 		 * Column 1 = Regulator 
 		 * Column 2 = Target Gene 
 		 * Column 3 = non-linear correlation coefficient derived from an analysis of variance (Two-way ANOVA)
 
-*Net_f = Inferred network write as 3-column cell array 
+* Net_f = Inferred network write as 3-column cell array 
+
 		 * Column 1 = Regulator 
 		 * Column 2 = Target Gene 
 		 * Column 3 = non-parametric, non-linear correlation coefficient derived from a Friedman Test 
