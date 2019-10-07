@@ -1,7 +1,9 @@
-function [Net_a,Net_f] = Anova(genes, regulators, expressiondata)
+function [sNet_a,sNet_f] = Anova(genes, regulators, expressiondata)
 
     warning ('off','all')
 
+    expressiondata = expressiondata';
+    
     nr = size(regulators,1);
     tfs = zeros(1,nr);
 
@@ -28,53 +30,60 @@ function [Net_a,Net_f] = Anova(genes, regulators, expressiondata)
         expredatap_2 = expressiondata(i,:);
 
         parfor j = 1:ntf   
-
-            expredatap_1 = tfexpression(j,:); 
-
-            [p_a,SS_a] = anova2([expredatap_1;expredatap_2],1,'off');
-            [p_f,SS_f] = friedman([expredatap_1;expredatap_2],1,'off');
-
-            if p_a(1,2) < 0.05 
-                np_a=SS_a{3,2}/SS_a{5,2};   %SSA/SStotal
+            
+            if i==tfs(1,j)
+                continue
             else
-                np_a=0;
-            end
-            if p_f < 0.05 
-                np_f=SS_f{2,2}/SS_f{4,2};   %SSA/SStotal
-            else 
-                np_f=0;
-            end
+                expredatap_1 = tfexpression(j,:); 
 
-            expredatan_1 = -expredatap_1;
-            expredatan_2 = expredatap_2;
+                [p_a,SS_a] = anova2([expredatap_1;expredatap_2],1,'off');
+                [p_f,SS_f] = friedman([expredatap_1;expredatap_2],1,'off');
 
-            [p_a,SS_a] = anova2([expredatan_1;expredatan_2],1,'off');
-            [p_f,SS_f] = friedman([expredatan_1;expredatan_2],1,'off')
+                if p_a(1,2) < 0.05 
+                    np_a=SS_a{3,2}/SS_a{5,2};   %SSA/SStotal
+                else
+                    np_a=0;
+                end
+                if p_f < 0.05 
+                    np_f=SS_f{2,2}/SS_f{4,2};   %SSA/SStotal
+                else 
+                    np_f=0;
+                end
 
-            if p_a(1,2) < 0.05 
-                nn_a=SS_a{3,2}/SS_a{5,2};  %SSA/SStotal
-            else
-                nn_a=0;
-            end
-            if p_f < 0.05 
-                nn_f=SS_f{2,2}/SS_f{4,2};  %SSA/SStotal
-            else 
-                nn_f=0;
-            end
+                expredatan_1 = -expredatap_1;
+                expredatan_2 = expredatap_2;
 
-            if np_a>nn_a
-                n2_a(i,j)=np_a;
-            else
-                n2_a(i,j)=-nn_a;
-            end
+                [p_a,SS_a] = anova2([expredatan_1;expredatan_2],1,'off');
+                [p_f,SS_f] = friedman([expredatan_1;expredatan_2],1,'off')
 
-            if np_f>nn_f
-                n2_f(i,j)=np_f;
-            else
-                n2_f(i,j)=-nn_f;
+                if p_a(1,2) < 0.05 
+                    nn_a=SS_a{3,2}/SS_a{5,2};  %SSA/SStotal
+                else
+                    nn_a=0;
+                end
+                if p_f < 0.05 
+                    nn_f=SS_f{2,2}/SS_f{4,2};  %SSA/SStotal
+                else 
+                    nn_f=0;
+                end
+
+                if np_a>nn_a
+                    n2_a(i,j)=np_a;
+                else
+                    n2_a(i,j)=-nn_a;
+                end
+
+                if np_f>nn_f
+                    n2_f(i,j)=np_f;
+                else
+                    n2_f(i,j)=-nn_f;
+                end
             end
         end
     end
+
+    n2_a=abs(n2_a);
+    n2_f=abs(n2_f);
 
     Net_a = cell(nnz(n2_a),3);
     
@@ -92,7 +101,9 @@ function [Net_a,Net_f] = Anova(genes, regulators, expressiondata)
             end
         end
     end
-    
+
+    sNet_a = sortrows(Net_a,3,'descend');
+   
     Net_f = cell(nnz(n2_f),3);
     
     r=1;
@@ -109,6 +120,8 @@ function [Net_a,Net_f] = Anova(genes, regulators, expressiondata)
             end
         end
     end
+
+    sNet_f = sortrows(Net_f,3,'descend');
     
 end
 
