@@ -1,4 +1,4 @@
-function [sNet_f] = Friedman(genes, regulators, expressiondata)
+function [sNet_f] = Friedman(gene_names, regulators, expressiondata)
 
     warning ('off','all')
 
@@ -22,7 +22,7 @@ function [sNet_f] = Friedman(genes, regulators, expressiondata)
 
         parfor j = 1:ntf   
             
-            if i==tfs(1,j)
+            if i == tfs(j,1)
                 continue
             else
                 expredatap_1 = tfexpression(j,:); 
@@ -66,8 +66,8 @@ function [sNet_f] = Friedman(genes, regulators, expressiondata)
             if n2_f(j,i) == 0 
                 continue
             else
-                Net_f{r,1} = genes{tfs(i)};
-                Net_f{r,2} = genes{j};
+                Net_f{r,1} = gene_names{tfs(i)};
+                Net_f{r,2} = gene_names{j};
                 Net_f{r,3} = n2_f(j,i);
                 r = r+1;
             end
