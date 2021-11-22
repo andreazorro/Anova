@@ -9,7 +9,7 @@ Required Input
 --------------
 
 * genes = cell array (# of genes,1) of genes names.
-* transcription factors = cell array (# of TF, 1)  of TF names.
+* transcription factors = cell array (# of TFs, 1)  of TFs names.
 * expressiondata = numeric matrix (# of genes, # of conditions) of the gene expression data.
 
 Output
